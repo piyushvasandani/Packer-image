@@ -1,0 +1,53 @@
+{
+  "builders": [
+    {
+      "type": "azure-arm",
+      "client_id": "57e2f82c-9801-4aa3-8c38-7d42afda7bdf",
+      "client_secret": "3Sv8Q~a5NJJgTf46Wx3bjw44gMnorNqHjsrgKbOK",
+      "tenant_id": "c62943a6-db7e-4acb-afde-ad89cc8162a2",
+      "subscription_id": "e0613b30-845d-4493-90d9-664f99761c94",
+
+
+      "managed_image_resource_group_name": "Packer",
+      "managed_image_name": "Sandbox",
+
+
+      "os_type": "Linux",
+      "image_publisher": "Canonical",
+      "image_offer": "0001-com-ubuntu-server-focal-daily",
+      "image_sku": "20_04-daily-lts-gen2",
+      "location": "eastus",
+      "vm_size": "Standard_DS2_v2",
+
+
+      "communicator": "ssh",
+      "ssh_username": "azureuser",
+      "ssh_port": 22
+    }
+  ],
+
+
+  "provisioners": [
+    {
+      "type": "shell" ,
+      "inline": [
+          "sleep 30",
+          "sudo apt-get update -y",
+    "sudo apt-get install -y libc6 libcrypt1 libffi7 libgcc-s1",
+          "sudo apt-get install openssh-client -y",
+          "sudo apt-get install sshpass -y",
+          "sudo apt-get install wget"
+      ]
+     
+  },
+    {
+      "type": "ansible",
+      "playbook_file": "/home/piyush/infra-dev-desktops/dev-desktop/dev-machine-ansible.yaml",
+      "extra_arguments": ["--extra-vars", "ansible_ssh_user=azureuser"],
+      "user": "azureuser"    
+    }
+  ]
+
+
+}
+
